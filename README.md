@@ -4,7 +4,9 @@ Automation tooling for [Keycloak](https://www.keycloak.org/)
 ## Introduction
 This repository provides some tooling to automate various tasks for Keycloak. Still in alpha state. Currently there is support for:
 - exporting users and the groups they belong to
-- processing an input file with users and the groups they should belong to and configure a Keycloak realm accordingly 
+- processing an input file with users and the groups they should belong to and configure a Keycloak realm accordingly
+
+**Note**: the only thing the script does is add (or remove) existing users to (or from) existing groups. It does not create any users or groups.
 
 ## Usage
 ```python
