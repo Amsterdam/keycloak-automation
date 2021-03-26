@@ -1,3 +1,4 @@
+import sys
 import argparse
 import logging
 import csv
@@ -27,6 +28,8 @@ class AuthorizationManager:
             groups = self.admin.get_groups()
             self._group_lookup = dict()
             for group in groups:
+                logger.info(f'group name: {group["name"]}')
+                logger.info(f'group path: {group["path"]}')
                 self._group_lookup[group['name']] = group['id']
         return self._group_lookup
 
@@ -62,6 +65,20 @@ class AuthorizationManager:
         for user in users_current:
             groups = ';'.join(users_current[user])
             print(f'{user}, {groups}')
+
+    def export_group_csv(self, group_name):
+        group_path = f'/{group_name}'
+        group = self.admin.get_group_by_path(group_path)
+        if not group:
+            logger.warning(f'Group {group_name} not found')
+            return False
+
+        group_id = group['id']
+        members = self.admin.get_group_members(group_id)
+        print(group['name'])
+        for member in members:
+            username = member['username']
+            print(f'- {username}')
 
     def export_users_current_yaml(self, users_current):
         """ Export users with yaml format:
@@ -157,6 +174,7 @@ if __name__ == '__main__':
     parser.add_argument('cmd', help='Command to execute')
     parser.add_argument('-i', '--inputfile', help='Input file to process')
     parser.add_argument('-c', '--checkmode', help='Run in check mode', action='store_true')
+    parser.add_argument('-n', '--name', help='Name of entity')
     args = parser.parse_args()
     cmd = args.cmd
     inputfile = args.inputfile
@@ -173,6 +191,11 @@ if __name__ == '__main__':
         group_lookup = AuthorizationManager.get_group_lookup()
         users_current = AuthorizationManager.get_users_current_state(group_lookup)
         AuthorizationManager.export_users_current_csv(users_current)
+    if cmd == 'exportgroup':
+        if not args.name:
+            sys.exit('Please provide a group name to export')
+
+        AuthorizationManager.export_group_csv(args.name)
 
 
 

@@ -16,8 +16,11 @@ python admin.py execute -i <inputfile>
 # Process an input csv file of users and groups, in check mode
 python admin.py execute -i <inputfile> -c
 
-# Export users and the groups they belong to as csv
+# Export users and the groups they belong to as csv (only usernames)
 python admin.py exportcsv
+
+# Export the users in a group (only usernames)
+python admin.py exportgroup -n <group name>
 ```
 
 ### Structure of the csv file:
