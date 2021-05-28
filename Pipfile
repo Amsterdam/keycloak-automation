@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 python-keycloak = "0.24.0"
+pyyaml = "*"
 
 [dev-packages]
 
